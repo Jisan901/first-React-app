@@ -1,44 +1,35 @@
 import './App.css';
-import {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react';
+import Nav from './components/Nav'
+import Todos from './components/Todos'
+import AddTodo from './components/AddTodo'
+import Mongo from './utilities/MongoLocal.react.min.js'
 
 function App() {
+    const [todos,setTodos]=useState([])
+    
+    const db = new Mongo('mongodb-uri67');
+    const db_todos = db.create('todos');
+    useEffect(()=>{
+        const db_todos = db.create('todos');
+        setTodos(db_todos.query_all())
+    },[])
+    
+    const addTodo = (title,desc)=>{
+        const new_todo={title,desc};
+        db_todos.insert_one(new_todo)
+        setTodos(db_todos.query_all())
+    }
+    const onDelete = (id)=>{
+        db_todos.delete_one({_id:id})
+        setTodos(db_todos.query_all())
+    }
     
     return (
         <div>
-            <Countries></Countries>
-        </div>
-    )
-}
-
-function Countries(){
-    const [rest,setRest] = useState([])
-    
-    useEffect(()=>{
-        fetch('https://restcountries.com/v3.1/all')
-        .then(res => res.json())
-        .then(data => {console.log(data); setRest(data)})
-    },[])
-    
-    return (
-    <div>
-        <h1>Countries</h1>
-        <div className="countries">
-            {
-                rest.map(e => <Country name={e.name.common} continent={e.continents[0]} flag={e.flags.png} population={e.population} independent={e.independent?"independent":"not independent"}></Country>)
-            }
-        </div>
-    </div>
-    )
-}
-
-function Country(props){
-    return (
-        <div className="country">
-            <img src={props.flag} alt="flag"/>
-            <h2>{props.name}</h2>
-            <p>continents:{props.continent}</p>
-            <p>population:{props.population}</p>
-            <p>{props.independent}</p>
+            <Nav />
+            <AddTodo addTodo={addTodo} />
+            <Todos todos={todos} onDelete={onDelete}/>
         </div>
     )
 }
