@@ -6,12 +6,10 @@ import AddTodo from './components/AddTodo'
 import Mongo from './utilities/MongoLocal.react.min.js'
 
 function App() {
-    const [todos,setTodos]=useState([])
-    
     const db = new Mongo('mongodb-uri67');
     const db_todos = db.create('todos');
     
-    setTodos(db_todos.query_all())
+    const [todos,setTodos]=useState(db_todos.query_all())
     
     
     const addTodo = (title,desc)=>{
