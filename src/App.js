@@ -1,5 +1,5 @@
 import './App.css';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import Nav from './components/Nav'
 import Todos from './components/Todos'
 import AddTodo from './components/AddTodo'
