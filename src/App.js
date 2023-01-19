@@ -10,10 +10,9 @@ function App() {
     
     const db = new Mongo('mongodb-uri67');
     const db_todos = db.create('todos');
-    useEffect(()=>{
-        const db_todos = db.create('todos');
-        setTodos(db_todos.query_all())
-    },[])
+    
+    setTodos(db_todos.query_all())
+    
     
     const addTodo = (title,desc)=>{
         const new_todo={title,desc};
